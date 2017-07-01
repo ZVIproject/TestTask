@@ -21,7 +21,7 @@ import com.zviproject.testtask.services.UserService;
  *
  */
 @RestController
-@RequestMapping(value = "/rest/testtask/v1/user")
+@RequestMapping(value = "/rest/testtask/v1/private/user")
 public class UserController {
 
 	@Autowired

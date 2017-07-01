@@ -37,7 +37,7 @@ public class UserDaoIntegrationTest {
 
 	private final String USER_NAME = "TestName";
 
-	private final Integer USER_PASSWORD = 999999;
+	private final String USER_PASSWORD = "testPassword";
 
 	private final Boolean USER_IS_ACTIVE = true;
 
@@ -85,7 +85,7 @@ public class UserDaoIntegrationTest {
 		UserEntity userEntityForUpdate = new UserEntity();
 		userEntityForUpdate.setId(userId);
 		userEntityForUpdate.setName("TestUpdateName");
-		userEntityForUpdate.setPassword(999991);
+		userEntityForUpdate.setPassword("TestUpdatePassword");
 		userEntityForUpdate.setIsActive(true);
 
 		iUser.update(userEntityForUpdate);

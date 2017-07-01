@@ -40,7 +40,7 @@ public class UserEntity {
 	private String name;
 
 	@Column(name = "password")
-	private Integer password;
+	private String password;
 
 	@Column(name = "is_active")
 	private Boolean isActive;
@@ -59,9 +59,9 @@ public class UserEntity {
 	 * @param password
 	 * @param isActive
 	 */
-	public UserEntity(String name, Integer password, Boolean isActive) {
+	public UserEntity(String name, String password, Boolean isActive) {
 		this.name = name;
-		this.password = password;
+		this.setPassword(password);
 		this.isActive = isActive;
 	}
 
@@ -71,14 +71,6 @@ public class UserEntity {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getPassword() {
-		return password;
-	}
-
-	public void setPassword(Integer password) {
-		this.password = password;
 	}
 
 	public Boolean getIsActive() {
@@ -103,6 +95,14 @@ public class UserEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }

@@ -20,7 +20,7 @@ import com.zviproject.testtask.services.RoleService;
  *
  */
 @RestController
-@RequestMapping(value = "/rest/testtask/v1/role")
+@RequestMapping(value = "/rest/testtask/v1/private/role")
 public class RoleController {
 
 	@Autowired

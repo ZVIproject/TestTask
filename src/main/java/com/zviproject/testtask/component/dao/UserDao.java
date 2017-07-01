@@ -62,8 +62,8 @@ public class UserDao implements IUser {
 	@Transactional
 	public void update(UserEntity userEntity) {
 
-		sessionFactory.getCurrentSession().createQuery(SQL_UPDATE_USER_BY_ID)
-				.setParameter("userName", userEntity.getName()).setParameter("userPassword", userEntity.getPassword())
+		sessionFactory.openSession().createQuery(SQL_UPDATE_USER_BY_ID).setParameter("userName", userEntity.getName())
+				.setParameter("userPassword", userEntity.getPassword())
 				.setParameter("userActive", userEntity.getIsActive()).setParameter("userId", userEntity.getId())
 				.executeUpdate();
 	}

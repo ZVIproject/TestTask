@@ -2,6 +2,7 @@ package com.zviproject.testtask.component.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 
@@ -85,7 +86,7 @@ public class RoleDaoIntegrationTest {
 
 		iRole.update(roleEntityForUpdate);
 
-		assertEquals(iRole.findByName("TestUpdateName").getName(), roleEntityForUpdate.getName());
+		assertNotNull(iRole.findByName("TestUpdateName"));
 
 	}
 

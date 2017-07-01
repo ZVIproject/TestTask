@@ -1,4 +1,4 @@
-package com.zviproject.testtask.configures;
+package com.zviproject.testtask.standalone.config;
 
 import java.util.Properties;
 
@@ -19,21 +19,26 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.zviproject.testtask.component.entitys.RoleEntity;
 import com.zviproject.testtask.component.entitys.UserEntity;
 
+/**
+ * Hibernate configuration for SessionFactory<br>
+ * 
+ * @author zviproject
+ *
+ */
 @Configuration
 @EnableTransactionManagement
 @ComponentScan({ "com.zviproject.testtask" })
 @PropertySource(value = { "classpath:application.properties" })
-public class Configurations {
-
-	// @Bean
-	// public SessionFactory sessionFactory(HibernateEntityManagerFactory hemf)
-	// {
-	// return hemf.getSessionFactory();
-	// }
+public class HibernateConfiguration {
 
 	@Autowired
 	private Environment environment;
 
+	/**
+	 * Contain sessionProperti config
+	 * 
+	 * @return
+	 */
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -47,6 +52,11 @@ public class Configurations {
 		return sessionFactory;
 	}
 
+	/**
+	 * Connect to the DB
+	 * 
+	 * @return
+	 */
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -63,11 +73,17 @@ public class Configurations {
 		return properties;
 	}
 
+	/**
+	 * Configuration of transactionManager
+	 * 
+	 * @param s
+	 * @return
+	 */
 	@Bean
 	@Autowired
-	public HibernateTransactionManager transactionManager(SessionFactory s) {
+	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
 		HibernateTransactionManager txManager = new HibernateTransactionManager();
-		txManager.setSessionFactory(s);
+		txManager.setSessionFactory(sessionFactory);
 		return txManager;
 	}
 }
