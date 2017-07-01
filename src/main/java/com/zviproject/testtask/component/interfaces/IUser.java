@@ -31,13 +31,20 @@ public interface IUser {
 	 * 
 	 * @param userEntity
 	 */
-	public void updateUser(Integer userId, UserEntity userEntity);
+	public void update(UserEntity userEntity);
 
 	/**
 	 * Create user in DB
 	 * 
 	 * @param userEntity
 	 */
-	public void createUser(UserEntity userEntity);
+	public Integer create(UserEntity userEntity);
+
+	/**
+	 * Find user in the DB by name
+	 * 
+	 * @param name
+	 */
+	public UserEntity findByName(String roleName);
 
 }

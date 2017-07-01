@@ -43,8 +43,8 @@ public class RoleService {
 	 * 
 	 * @param roleEntity
 	 */
-	public void updateRole(Integer roleId, RoleEntity roleEntity) {
-		iRole.updateRole(roleId, roleEntity);
+	public void update(RoleEntity roleEntity) {
+		iRole.update(roleEntity);
 	}
 
 	/**
@@ -52,7 +52,16 @@ public class RoleService {
 	 * 
 	 * @param roleEntity
 	 */
-	public void createRole(RoleEntity roleEntity) {
-		iRole.createRole(roleEntity);
+	public Integer create(RoleEntity roleEntity) {
+		return iRole.create(roleEntity);
+	}
+
+	/**
+	 * Find role in the DB by name
+	 * 
+	 * @param name
+	 */
+	public RoleEntity findByName(String roleName) {
+		return iRole.findByName(roleName);
 	}
 }

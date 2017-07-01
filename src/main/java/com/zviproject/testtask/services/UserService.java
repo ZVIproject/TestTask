@@ -43,8 +43,8 @@ public class UserService {
 	 * 
 	 * @param userEntity
 	 */
-	public void updateUser(Integer userId, UserEntity userEntity) {
-		iUser.updateUser(userId, userEntity);
+	public void update(UserEntity userEntity) {
+		iUser.update(userEntity);
 	}
 
 	/**
@@ -52,8 +52,17 @@ public class UserService {
 	 * 
 	 * @param userEntity
 	 */
-	public void createUser(UserEntity userEntity) {
-		iUser.createUser(userEntity);
+	public Integer create(UserEntity userEntity) {
+		return iUser.create(userEntity);
+	}
+
+	/**
+	 * Find user in the DB by name
+	 * 
+	 * @param name
+	 */
+	public UserEntity findByName(String userName) {
+		return iUser.findByName(userName);
 	}
 
 }

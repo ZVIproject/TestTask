@@ -19,7 +19,11 @@ import com.zviproject.testtask.component.interfaces.IUser;
 @Component
 public class UserDao implements IUser {
 
-	private static final String SQL_DELETE_USERS_BY_ID = "DELETE FROM `user` WHERE id  IN(:usersId);";
+	private static final String SQL_DELETE_USERS_BY_ID = "DELETE FROM UserEntity WHERE id IN :usersId";
+
+	private static final String SQL_GET_USER_BY_NAME = "FROM UserEntity user WHERE name = :userName";
+
+	private static final String SQL_UPDATE_USER_BY_ID = "UPDATE UserEntity user SET name = :userName, password = :userPassword, isActive = :userActive WHERE id=:userId";
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -30,10 +34,10 @@ public class UserDao implements IUser {
 	 * @param usersId
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	public void deleteUsers(List<Integer> usersId) {
 
-		sessionFactory.openSession().createQuery(SQL_DELETE_USERS_BY_ID).setParameter("usersId", usersId)
+		sessionFactory.openSession().createQuery(SQL_DELETE_USERS_BY_ID).setParameterList("usersId", usersId)
 				.executeUpdate();
 	}
 
@@ -43,10 +47,10 @@ public class UserDao implements IUser {
 	 * @return Set<UserEntity>
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	public List<UserEntity> getUsers() {
 
-		return sessionFactory.openSession().getNamedQuery("UserEntity.getAll").list();
+		return sessionFactory.openSession().getNamedQuery("UserEntity.getAllUsers").list();
 	}
 
 	/**
@@ -55,10 +59,13 @@ public class UserDao implements IUser {
 	 * @param userEntity
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void updateUser(Integer userId, UserEntity userEntity) {
+	@Transactional
+	public void update(UserEntity userEntity) {
 
-		sessionFactory.openSession().update(userEntity);
+		sessionFactory.openSession().createQuery(SQL_UPDATE_USER_BY_ID).setParameter("userName", userEntity.getName())
+				.setParameter("userPassword", userEntity.getPassword())
+				.setParameter("userActive", userEntity.getIsActive()).setParameter("userId", userEntity.getId())
+				.executeUpdate();
 	}
 
 	/**
@@ -67,10 +74,24 @@ public class UserDao implements IUser {
 	 * @param userEntity
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void createUser(UserEntity userEntity) {
+	@Transactional
+	public Integer create(UserEntity userEntity) {
 
 		sessionFactory.openSession().save(userEntity);
+		return userEntity.getId();
+	}
+
+	/**
+	 * Find user in the DB by name
+	 * 
+	 * @param name
+	 */
+	@Override
+	@Transactional
+	public UserEntity findByName(String userName) {
+
+		return (UserEntity) sessionFactory.openSession().createQuery(SQL_GET_USER_BY_NAME)
+				.setParameter("userName", userName).uniqueResult();
 	}
 
 }

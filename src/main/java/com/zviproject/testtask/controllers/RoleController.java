@@ -1,8 +1,11 @@
 package com.zviproject.testtask.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +20,7 @@ import com.zviproject.testtask.services.RoleService;
  *
  */
 @RestController
-@RequestMapping(value = "/rest/testtask/v1/role")
+@RequestMapping(value = "/rest/testtask/v1/private/role")
 public class RoleController {
 
 	@Autowired
@@ -28,7 +31,7 @@ public class RoleController {
 	 * 
 	 * @param roleId
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(method = RequestMethod.DELETE)
 	public void deleteRoles(List<Integer> rolesId) {
 		roleService.deleteRoles(rolesId);
 	}
@@ -38,7 +41,7 @@ public class RoleController {
 	 * 
 	 * @return Set<RoleEntity>
 	 */
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET)
 	public List<RoleEntity> getRoles() {
 		return roleService.getRoles();
 	}
@@ -48,9 +51,9 @@ public class RoleController {
 	 * 
 	 * @param roleEntity
 	 */
-	@RequestMapping(method = RequestMethod.PUT, produces = "application/json")
-	public void updateRole(Integer roleId, RoleEntity roleEntity) {
-		roleService.updateRole(roleId, roleEntity);
+	@RequestMapping(method = RequestMethod.PUT)
+	public void update(RoleEntity roleEntity) {
+		roleService.update(roleEntity);
 	}
 
 	/**
@@ -58,8 +61,20 @@ public class RoleController {
 	 * 
 	 * @param roleEntity
 	 */
-	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public void createRole(RoleEntity roleEntity) {
-		roleService.createRole(roleEntity);
+	@RequestMapping(method = RequestMethod.POST)
+	public Map<String, Integer> create(RoleEntity roleEntity) {
+		Map<String, Integer> result = new HashMap<>();
+		result.put("generated_role_id", roleService.create(roleEntity));
+		return result;
+	}
+
+	/**
+	 * Find role in the DB by name
+	 * 
+	 * @param name
+	 */
+	@RequestMapping(value = "/{role_name}", method = RequestMethod.GET)
+	public RoleEntity findByName(@PathVariable("role_name") String roleName) {
+		return roleService.findByName(roleName);
 	}
 }

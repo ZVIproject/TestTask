@@ -1,8 +1,11 @@
 package com.zviproject.testtask.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +21,7 @@ import com.zviproject.testtask.services.UserService;
  *
  */
 @RestController
-@RequestMapping(value = "/rest/testtask/v1/user")
+@RequestMapping(value = "/rest/testtask/v1/private/user")
 public class UserController {
 
 	@Autowired
@@ -29,7 +32,7 @@ public class UserController {
 	 * 
 	 * @param usersId
 	 */
-	@RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(method = RequestMethod.DELETE)
 	public void deleteUsers(@RequestBody List<Integer> usersId) {
 		userService.deleteUsers(usersId);
 	}
@@ -49,9 +52,9 @@ public class UserController {
 	 * 
 	 * @param userEntity
 	 */
-	@RequestMapping(method = RequestMethod.PUT, produces = "application/json")
-	public void updateUser(Integer userId, @RequestBody UserEntity userEntity) {
-		userService.updateUser(0, userEntity);
+	@RequestMapping(method = RequestMethod.PUT)
+	public void update(@RequestBody UserEntity userEntity) {
+		userService.update(userEntity);
 	}
 
 	/**
@@ -59,8 +62,20 @@ public class UserController {
 	 * 
 	 * @param userEntity
 	 */
-	@RequestMapping(method = RequestMethod.POST, produces = "application/json")
-	public void createUser(@RequestBody UserEntity userEntity) {
-		userService.createUser(userEntity);
+	@RequestMapping(method = RequestMethod.POST)
+	public Map<String, Integer> create(@RequestBody UserEntity userEntity) {
+		Map<String, Integer> result = new HashMap<>();
+		result.put("generated_user_id", userService.create(userEntity));
+		return result;
+	}
+
+	/**
+	 * Find user in the DB by name
+	 * 
+	 * @param name
+	 */
+	@RequestMapping(value = "/{user_name}", method = RequestMethod.GET)
+	public UserEntity findByName(@PathVariable("user_name") String userName) {
+		return userService.findByName(userName);
 	}
 }

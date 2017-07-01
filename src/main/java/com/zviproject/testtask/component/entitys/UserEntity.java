@@ -3,8 +3,10 @@ package com.zviproject.testtask.component.entitys;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,12 +23,13 @@ import javax.persistence.Table;
  * @author zviproject
  *
  */
+@NamedQueries({
+		@NamedQuery(name = UserEntity.QUERY_NAME_FOR_GET_ALL, query = "SELECT ue FROM UserEntity ue LEFT JOIN ue.roleName") })
 @Entity
 @Table(name = "user")
-@NamedQueries({
-		@NamedQuery(name = UserEntity.QUERY_NAME_FOR_GET_ALL, query = "SELECT ue FROM UserEntity ue LEFT JOIN FETCH ue.roleName") })
 public class UserEntity {
-	public static final String QUERY_NAME_FOR_GET_ALL = "UserEntity.getAll";
+
+	public static final String QUERY_NAME_FOR_GET_ALL = "UserEntity.getAllUsers";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,17 +37,33 @@ public class UserEntity {
 	private Integer id;
 
 	@Column(name = "name")
-	private Integer name;
+	private String name;
 
 	@Column(name = "password")
-	private Integer password;
+	private String password;
 
 	@Column(name = "is_active")
 	private Boolean isActive;
 
-	@ManyToMany
-	@JoinTable(name = "connect_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<String> roleName = new HashSet<>();
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "connect_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Set<RoleEntity> roleName = new HashSet<>();
+
+	public UserEntity() {
+	}
+
+	/**
+	 * Use for creating user with filled fields
+	 * 
+	 * @param name
+	 * @param password
+	 * @param isActive
+	 */
+	public UserEntity(String name, String password, Boolean isActive) {
+		this.name = name;
+		this.setPassword(password);
+		this.isActive = isActive;
+	}
 
 	public Integer getId() {
 		return id;
@@ -52,22 +71,6 @@ public class UserEntity {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getName() {
-		return name;
-	}
-
-	public void setName(Integer name) {
-		this.name = name;
-	}
-
-	public Integer getPassword() {
-		return password;
-	}
-
-	public void setPassword(Integer password) {
-		this.password = password;
 	}
 
 	public Boolean getIsActive() {
@@ -78,12 +81,28 @@ public class UserEntity {
 		this.isActive = isActive;
 	}
 
-	public Set<String> getRoleName() {
+	public Set<RoleEntity> getRoleName() {
 		return roleName;
 	}
 
-	public void setRoleName(Set<String> roleName) {
+	public void setRoleName(Set<RoleEntity> roleName) {
 		this.roleName = roleName;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
