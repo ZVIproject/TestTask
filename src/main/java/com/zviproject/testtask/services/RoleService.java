@@ -43,8 +43,8 @@ public class RoleService {
 	 * 
 	 * @param roleEntity
 	 */
-	public void update(Integer roleId, RoleEntity roleEntity) {
-		iRole.update(roleId, roleEntity);
+	public void update(RoleEntity roleEntity) {
+		iRole.update(roleEntity);
 	}
 
 	/**
@@ -52,8 +52,8 @@ public class RoleService {
 	 * 
 	 * @param roleEntity
 	 */
-	public void create(RoleEntity roleEntity) {
-		iRole.create(roleEntity);
+	public Integer create(RoleEntity roleEntity) {
+		return iRole.create(roleEntity);
 	}
 
 	/**

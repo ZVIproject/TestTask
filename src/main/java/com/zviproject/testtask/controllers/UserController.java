@@ -1,6 +1,8 @@
 package com.zviproject.testtask.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,8 +53,8 @@ public class UserController {
 	 * @param userEntity
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
-	public void updateUser(Integer userId, @RequestBody UserEntity userEntity) {
-		userService.update(0, userEntity);
+	public void update(@RequestBody UserEntity userEntity) {
+		userService.update(userEntity);
 	}
 
 	/**
@@ -61,8 +63,10 @@ public class UserController {
 	 * @param userEntity
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public void createUser(@RequestBody UserEntity userEntity) {
-		userService.create(userEntity);
+	public Map<String, Integer> create(@RequestBody UserEntity userEntity) {
+		Map<String, Integer> result = new HashMap<>();
+		result.put("generated_user_id", userService.create(userEntity));
+		return result;
 	}
 
 	/**

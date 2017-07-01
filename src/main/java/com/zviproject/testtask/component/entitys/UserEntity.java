@@ -60,7 +60,7 @@ public class UserEntity {
 	 * @param isActive
 	 */
 	public UserEntity(String name, Integer password, Boolean isActive) {
-		this.setName(name);
+		this.name = name;
 		this.password = password;
 		this.isActive = isActive;
 	}

@@ -1,6 +1,8 @@
 package com.zviproject.testtask.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,8 +52,8 @@ public class RoleController {
 	 * @param roleEntity
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
-	public void updateRole(Integer roleId, RoleEntity roleEntity) {
-		roleService.update(roleId, roleEntity);
+	public void update(RoleEntity roleEntity) {
+		roleService.update(roleEntity);
 	}
 
 	/**
@@ -60,8 +62,10 @@ public class RoleController {
 	 * @param roleEntity
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public void createRole(RoleEntity roleEntity) {
-		roleService.create(roleEntity);
+	public Map<String, Integer> create(RoleEntity roleEntity) {
+		Map<String, Integer> result = new HashMap<>();
+		result.put("generated_role_id", roleService.create(roleEntity));
+		return result;
 	}
 
 	/**

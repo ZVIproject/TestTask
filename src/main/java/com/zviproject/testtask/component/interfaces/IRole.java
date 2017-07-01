@@ -31,14 +31,14 @@ public interface IRole {
 	 * 
 	 * @param roleEntity
 	 */
-	public void update(Integer roleId, RoleEntity roleEntity);
+	public void update(RoleEntity roleEntity);
 
 	/**
 	 * Create role in DB
 	 * 
 	 * @param roleEntity
 	 */
-	public void create(RoleEntity roleEntity);
+	public Integer create(RoleEntity roleEntity);
 
 	/**
 	 * Find role in the DB by name

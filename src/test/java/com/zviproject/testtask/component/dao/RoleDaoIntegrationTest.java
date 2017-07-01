@@ -20,6 +20,12 @@ import com.zviproject.testtask.component.entitys.RoleEntity;
 import com.zviproject.testtask.component.interfaces.IRole;
 import com.zviproject.testtask.standalone.TestTaskApplication;
 
+/**
+ * Tests for RoleDao class
+ * 
+ * @author zviproject
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = TestTaskApplication.class)
@@ -33,12 +39,14 @@ public class RoleDaoIntegrationTest {
 	@Autowired
 	private IRole iRole;
 
+	private Integer roleId;
+
 	/**
 	 * Create a test role in the DB for testing operations
 	 */
 	@Before
 	public void addTestRoleToTheDB() {
-		iRole.create(new RoleEntity(ROLE_NAME));
+		roleId = iRole.create(new RoleEntity(ROLE_NAME));
 	}
 
 	/**
@@ -61,7 +69,7 @@ public class RoleDaoIntegrationTest {
 
 		Integer sizeBeforeDeleting = iRole.getRoles().size();
 
-		iRole.deleteRoles(Arrays.asList());
+		iRole.deleteRoles(Arrays.asList(roleId));
 
 		assertEquals(iRole.getRoles().size(), sizeBeforeDeleting - 1);
 	}
@@ -71,6 +79,13 @@ public class RoleDaoIntegrationTest {
 	 */
 	@Test
 	public void updateRoleTest() {
+		RoleEntity roleEntityForUpdate = new RoleEntity();
+		roleEntityForUpdate.setId(roleId);
+		roleEntityForUpdate.setName("TestUpdateName");
+
+		iRole.update(roleEntityForUpdate);
+
+		assertEquals(iRole.findByName("TestUpdateName").getName(), roleEntityForUpdate.getName());
 
 	}
 

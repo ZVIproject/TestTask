@@ -19,7 +19,7 @@ import com.zviproject.testtask.component.interfaces.IUser;
 @Component
 public class UserDao implements IUser {
 
-	private static final String SQL_DELETE_USERS_BY_ID = "DELETE FROM `user` WHERE id  IN(:usersId)";
+	private static final String SQL_DELETE_USERS_BY_ID = "DELETE FROM UserEntity WHERE id IN :usersId";
 
 	private static final String SQL_GET_USER_BY_NAME = "FROM UserEntity user WHERE name = :userName";
 
@@ -37,7 +37,7 @@ public class UserDao implements IUser {
 	@Transactional
 	public void deleteUsers(List<Integer> usersId) {
 
-		sessionFactory.openSession().createQuery(SQL_DELETE_USERS_BY_ID).setParameter("usersId", usersId)
+		sessionFactory.openSession().createQuery(SQL_DELETE_USERS_BY_ID).setParameterList("usersId", usersId)
 				.executeUpdate();
 	}
 
@@ -60,7 +60,7 @@ public class UserDao implements IUser {
 	 */
 	@Override
 	@Transactional
-	public void update(Integer userId, UserEntity userEntity) {
+	public void update(UserEntity userEntity) {
 
 		sessionFactory.getCurrentSession().createQuery(SQL_UPDATE_USER_BY_ID)
 				.setParameter("userName", userEntity.getName()).setParameter("userPassword", userEntity.getPassword())
@@ -75,9 +75,10 @@ public class UserDao implements IUser {
 	 */
 	@Override
 	@Transactional
-	public void create(UserEntity userEntity) {
+	public Integer create(UserEntity userEntity) {
 
 		sessionFactory.openSession().save(userEntity);
+		return userEntity.getId();
 	}
 
 	/**

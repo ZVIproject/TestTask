@@ -19,7 +19,7 @@ import com.zviproject.testtask.component.interfaces.IRole;
 @Component
 public class RoleDao implements IRole {
 
-	private static final String SQL_DELETE_ROLES_BY_ID = "DELETE FROM `user` WHERE id  IN(:rolesId)";
+	private static final String SQL_DELETE_ROLES_BY_ID = "DELETE FROM RoleEntity WHERE id  IN(:rolesId)";
 
 	private static final String SQL_GET_ROLE_BY_NAME = "FROM RoleEntity role WHERE name=:roleName";
 
@@ -34,10 +34,10 @@ public class RoleDao implements IRole {
 	 * @param roleId
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	public void deleteRoles(List<Integer> rolesId) {
 
-		sessionFactory.openSession().createQuery(SQL_DELETE_ROLES_BY_ID).setParameter("rolesId", rolesId)
+		sessionFactory.openSession().createQuery(SQL_DELETE_ROLES_BY_ID).setParameterList("rolesId", rolesId)
 				.executeUpdate();
 	}
 
@@ -47,7 +47,7 @@ public class RoleDao implements IRole {
 	 * @return Set<RoleEntity>
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional
 	public List<RoleEntity> getRoles() {
 		return sessionFactory.openSession().getNamedQuery("RoleEntity.getAllRoles").list();
 	}
@@ -58,11 +58,10 @@ public class RoleDao implements IRole {
 	 * @param roleEntity
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(Integer roleId, RoleEntity roleEntity) {
-		sessionFactory.getCurrentSession().createQuery(SQL_UPDATE_ROLE_BY_ID)
-				.setParameter("roleName", roleEntity.getName()).setParameter("roleId", roleEntity.getId())
-				.executeUpdate();
+	@Transactional
+	public void update(RoleEntity roleEntity) {
+		sessionFactory.openSession().createQuery(SQL_UPDATE_ROLE_BY_ID).setParameter("roleName", roleEntity.getName())
+				.setParameter("roleId", roleEntity.getId()).executeUpdate();
 	}
 
 	/**
@@ -71,10 +70,11 @@ public class RoleDao implements IRole {
 	 * @param roleEntity
 	 */
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void create(RoleEntity roleEntity) {
+	@Transactional
+	public Integer create(RoleEntity roleEntity) {
 
 		sessionFactory.openSession().save(roleEntity);
+		return roleEntity.getId();
 	}
 
 	/**
@@ -83,6 +83,7 @@ public class RoleDao implements IRole {
 	 * @param name
 	 */
 	@Override
+	@Transactional
 	public RoleEntity findByName(String roleName) {
 		return (RoleEntity) sessionFactory.openSession().createQuery(SQL_GET_ROLE_BY_NAME)
 				.setParameter("roleName", roleName).uniqueResult();

@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -21,7 +20,7 @@ import com.zviproject.testtask.component.interfaces.IUser;
 import com.zviproject.testtask.standalone.TestTaskApplication;
 
 /**
- * Tests for UserDAO class
+ * Tests for UserDao class
  * 
  * @author zviproject
  *
@@ -31,7 +30,6 @@ import com.zviproject.testtask.standalone.TestTaskApplication;
 @ContextConfiguration(classes = TestTaskApplication.class)
 @WebAppConfiguration
 @Transactional
-@Rollback
 public class UserDaoIntegrationTest {
 
 	@Autowired
@@ -43,12 +41,14 @@ public class UserDaoIntegrationTest {
 
 	private final Boolean USER_IS_ACTIVE = true;
 
+	private Integer userId;
+
 	/**
 	 * Create a test user in the DB for testing operations
 	 */
 	@Before
 	public void addTestUserToTheDB() {
-		iUser.create(new UserEntity(USER_NAME, USER_PASSWORD, USER_IS_ACTIVE));
+		userId = iUser.create(new UserEntity(USER_NAME, USER_PASSWORD, USER_IS_ACTIVE));
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class UserDaoIntegrationTest {
 
 		Integer sizeBeforeDeleting = iUser.getUsers().size();
 
-		iUser.deleteUsers(Arrays.asList());
+		iUser.deleteUsers(Arrays.asList(userId));
 
 		assertEquals(iUser.getUsers().size(), sizeBeforeDeleting - 1);
 	}
@@ -81,6 +81,16 @@ public class UserDaoIntegrationTest {
 	 */
 	@Test
 	public void updateUserTest() {
+
+		UserEntity userEntityForUpdate = new UserEntity();
+		userEntityForUpdate.setId(userId);
+		userEntityForUpdate.setName("TestUpdateName");
+		userEntityForUpdate.setPassword(999991);
+		userEntityForUpdate.setIsActive(true);
+
+		iUser.update(userEntityForUpdate);
+
+		assertEquals(iUser.findByName("TestUpdateName").getPassword(), userEntityForUpdate.getPassword());
 
 	}
 

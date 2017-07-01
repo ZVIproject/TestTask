@@ -43,8 +43,8 @@ public class UserService {
 	 * 
 	 * @param userEntity
 	 */
-	public void update(Integer userId, UserEntity userEntity) {
-		iUser.update(userId, userEntity);
+	public void update(UserEntity userEntity) {
+		iUser.update(userEntity);
 	}
 
 	/**
@@ -52,8 +52,8 @@ public class UserService {
 	 * 
 	 * @param userEntity
 	 */
-	public void create(UserEntity userEntity) {
-		iUser.create(userEntity);
+	public Integer create(UserEntity userEntity) {
+		return iUser.create(userEntity);
 	}
 
 	/**
